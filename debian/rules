@@ -1,4 +1,34 @@
 #!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+include /usr/share/dpkg/pkg-info.mk
+
+DEB_REQUESTED_PACKAGES := $(shell dh_listpackages)
+when-in-build-profile     = $(patsubst 0,$(3),$(patsubst 1,$(2),$(patsubst 01,1,0$(patsubst $(1),1,$(filter $(1),$(DEB_BUILD_PROFILES))))))
+when-not-in-build-profile = $(patsubst 0,$(3),$(patsubst 1,$(2),$(patsubst 11,0,1$(patsubst $(1),1,$(filter $(1),$(DEB_BUILD_PROFILES))))))
+when-building-package     = $(patsubst 0,$(3),$(patsubst 1,$(2),$(patsubst 01,1,0$(patsubst $(1),1,$(filter $(1),$(DEB_REQUESTED_PACKAGES))))))
+when-not-building-package = $(patsubst 0,$(3),$(patsubst 1,$(2),$(patsubst 11,0,1$(patsubst $(1),1,$(filter $(1),$(DEB_REQUESTED_PACKAGES))))))
 
 %:
-	dh $@
+	dh $@ --buildsystem=cmake
+
+override_dh_auto_install-indep:
+# skip "make install" which is needed (and works) only when building
+# -arch targets
+
+execute_before_dh_auto_build-arch:
+# hopefully shed some light on why this FTBFS for 32 bit archs on
+# reproducible-builds.org, but not on buildd.d.o
+ifeq ($(DEB_HOST_ARCH_BITS),32)
+	-set
+	-cmake --system-information
+	-uname -a
+	-LD_PRELOAD="" uname -a
+endif
+
+override_dh_auto_build-indep:
+ifeq (x,$(call when-not-in-build-profile,nodoc,x))
+	dh_auto_build --buildsystem=cmake -- doc
+endif

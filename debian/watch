@@ -1,0 +1,4 @@
+version=4
+http://sf.net/ed448goldilocks/ libdecaf-(.*)\.tar\.gz debian uupdate
+#https://sourceforge.net/projects/ed448goldilocks/files/
+# https://git.code.sf.net/p/ed448goldilocks/code ed448goldilocks-code

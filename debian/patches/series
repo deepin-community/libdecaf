@@ -1,0 +1,3 @@
+fix-cmake-install-paths.patch
+fix-declarations.patch
+fix-attribute-deprecated-decl.patch

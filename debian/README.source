@@ -1,0 +1,5 @@
+
+README.source
+
+I tend to find myself repackaging the tarball for this by hand because
+the upstream tarball is nigh corrupted (e.g. breaks pristine-tar).

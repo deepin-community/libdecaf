@@ -1,0 +1,14 @@
+Description: Install cmake files below /usr/lib/<triplet>
+Author: Dennis Filder <d.filder@web.de>
+Last-Update: 2022-01-14
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -72,7 +72,7 @@
+ endif()
+ 
+ include(CMakePackageConfigHelpers)
+-set(ConfigPackageLocation share/decaf/cmake)
++set(ConfigPackageLocation ${CMAKE_INSTALL_FULL_LIBDIR}/cmake/decaf)
+ export(EXPORT ${EXPORT_TARGETS_NAME}Targets
+ 	FILE "${CMAKE_CURRENT_BINARY_DIR}/DecafTargets.cmake"
+ )
